@@ -27,3 +27,6 @@ def delete_item(db: Session, item_id: int):
         db.delete(db_item)
         db.commit()
     return db_item
+
+def get_all_items(db: Session):
+    return db.query(Item).all()

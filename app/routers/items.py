@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app import crud, models, schemas
@@ -19,6 +20,11 @@ def read_item(item_id: int, db: Session = Depends(get_db)):
     if db_item is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return db_item
+
+@router.get("/", response_model=List[schemas.Item])
+def read_all_items(db: Session = Depends(get_db)):
+    items = crud.get_all_items(db)
+    return items
 
 @router.put("/{item_id}", response_model=schemas.Item)
 def update_item(item_id: int, item: schemas.ItemUpdate, db: Session = Depends(get_db)):
